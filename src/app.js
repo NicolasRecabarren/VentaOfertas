@@ -15,5 +15,4 @@ app.use( urlencoded({extended: false}) );
 // Routes here
 //app.use('/api/products', productsRoutes);
 
-
 export default app;
