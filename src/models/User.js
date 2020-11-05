@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-
+jkjkjkjk
 
 const User = sequelize.define('users',{
     id: {
