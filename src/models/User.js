@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-
+import Role from './Role';
 
 const User = sequelize.define('users',{
     id: {
@@ -19,12 +19,11 @@ const User = sequelize.define('users',{
     },
     role_id: {
         type: Sequelize.INTEGER
-    },
-    created_at: {
-        type: Sequelize.DATE
     }
 },{
     //timestamps: false
 });
+
+User.belongsTo(Role, { foreignKey: 'role_id' });
 
 export default User;
