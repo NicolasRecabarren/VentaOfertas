@@ -2,7 +2,7 @@ import express, { json, urlencoded } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 
-//import productsRoutes from './routes/products';
+import usersRoutes from './routes/users';
 
 const app = express();
 
@@ -13,6 +13,6 @@ app.use( json() );
 app.use( urlencoded({extended: false}) );
 
 // Routes here
-//app.use('/api/products', productsRoutes);
+app.use('/api/users', usersRoutes);
 
 export default app;
