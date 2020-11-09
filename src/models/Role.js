@@ -7,8 +7,11 @@ const Role = sequelize.define('roles', {
         primaryKey: true
     },
     name: {
-        type: Sequelize.STRING(20)
+        type: Sequelize.STRING(20),
+        allowNull: false
     }
+}, {
+    timestamps: false
 });
 
 export default Role;

@@ -7,9 +7,9 @@ const ProductType = sequelize.define('product_types', {
         primaryKey: true
     },
     name: {
-        type: Sequelize.STRING(30)
-    }
-    ,
+        type: Sequelize.STRING(30),
+        allowNull: false
+    },
     description: {
         type: Sequelize.STRING(255)
     }

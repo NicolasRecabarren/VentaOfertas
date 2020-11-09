@@ -1,15 +1,18 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-const Dte = sequelize.define('dtes', {
+const PaymentMethod = sequelize.define('payment_methods', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
-    order_id: {
-        type: Sequelize.INTEGER,
+    name: {
+        type: Sequelize.STRING(20),
         allowNull: false
+    },
+    api_key: {
+        type: Sequelize.STRING
     }
 });
 
-export default Dte;
+export default PaymentMethod;

@@ -1,15 +1,19 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-const OrderType = sequelize.define('order_types', {
+import Order from './Order';
+
+const OrderStep = sequelize.define('order_steps', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true
     },
     name: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.STRING(20),
         allowNull: false
     }
 });
 
-export default OrderType;
+OrderStep.hasMany(Order, {foreignKey: 'order_step_id'} );
+
+export default OrderStep;

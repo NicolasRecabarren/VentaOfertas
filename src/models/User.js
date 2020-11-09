@@ -9,16 +9,21 @@ const User = sequelize.define('users',{
         primaryKey: true
     },
     username: {
-        type: Sequelize.STRING(255)
+        type: Sequelize.STRING(255),
+        unique: true,
+        allowNull: false
     },
     password: {
-        type: Sequelize.STRING(255)
+        type: Sequelize.STRING(255),
+        allowNull: false
     },
     active: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
     },
     role_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 2
     }
 },{
     //timestamps: false

@@ -10,7 +10,8 @@ const Province = sequelize.define('provinces', {
         primaryKey: true
     },
     name: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING(50),
+        allowNull: false
     },
     state_id: {
         type: Sequelize.INTEGER

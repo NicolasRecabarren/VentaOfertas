@@ -9,10 +9,12 @@ const District = sequelize.define('districts', {
         primaryKey: true
     },
     name: {
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING(50),
+        allowNull: false
     },
     province_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
     }
 },{
     // Con esto evitamos que cree las columnas createdAt y updatedAt al realizar las migraciones.
