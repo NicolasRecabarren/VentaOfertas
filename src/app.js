@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import usersRoutes from './routes/users';
+import rolesRoutes from './routes/roles';
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use( urlencoded({extended: false}) );
 
 // Routes here
 app.use('/api/users', usersRoutes);
+app.use('/api/roles', rolesRoutes);
 
 export default app;
