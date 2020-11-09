@@ -4,6 +4,7 @@ import { sequelize } from '../database/connection';
 const Dte = sequelize.define('dtes', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     order_id: {

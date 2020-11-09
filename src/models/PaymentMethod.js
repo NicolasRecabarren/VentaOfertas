@@ -4,6 +4,7 @@ import { sequelize } from '../database/connection';
 const PaymentMethod = sequelize.define('payment_methods', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     name: {

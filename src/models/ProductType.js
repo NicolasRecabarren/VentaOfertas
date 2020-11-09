@@ -4,6 +4,7 @@ import { sequelize } from '../database/connection';
 const ProductType = sequelize.define('product_types', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     name: {

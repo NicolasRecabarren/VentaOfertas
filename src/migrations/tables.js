@@ -22,6 +22,7 @@ export const tables = [
         instance: sequelize.define('addresses', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             street: {
@@ -54,6 +55,7 @@ export const tables = [
         instance: sequelize.define('address_types', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -71,6 +73,7 @@ export const tables = [
         instance: sequelize.define('customers', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             rut: {
@@ -100,6 +103,7 @@ export const tables = [
         instance: sequelize.define('districts', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -121,6 +125,7 @@ export const tables = [
         instance: sequelize.define('dtes', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             order_id: {
@@ -140,6 +145,7 @@ export const tables = [
         instance: sequelize.define('orders',{
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             code: {
@@ -190,6 +196,7 @@ export const tables = [
         instance: sequelize.define('order_products',{
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             quantity: {
@@ -220,6 +227,7 @@ export const tables = [
         instance: sequelize.define('order_steps', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -234,6 +242,7 @@ export const tables = [
         instance: sequelize.define('order_types', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -248,6 +257,7 @@ export const tables = [
         instance: sequelize.define('payment_methods', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -265,6 +275,7 @@ export const tables = [
         instance: sequelize.define('products',{
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             sku: {
@@ -314,6 +325,7 @@ export const tables = [
         instance: sequelize.define('product_categories', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -325,11 +337,36 @@ export const tables = [
         })
     },
     {
+        name: 'ProductImage',
+        order: 4,
+        belongsTo: [
+            {modelName: 'Product', foreignKey: 'product_id'}
+        ],
+        instance: sequelize.define('product_images', {
+            id: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            image: {
+                type: Sequelize.TEXT
+            },
+            url: {
+                type: Sequelize.TEXT
+            },
+            product_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            }
+        }, {timestamps: false})
+    },
+    {
         name: 'ProductType',
         order: 1,
         instance: sequelize.define('product_types', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -350,6 +387,7 @@ export const tables = [
         instance: sequelize.define('provinces', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -367,13 +405,16 @@ export const tables = [
         instance: sequelize.define('roles', {
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
                 type: Sequelize.STRING(20),
                 allowNull: false
             }
-        }, { timestamps: false })
+        }, {
+            timestamps: false
+        })
     },
     {
         name: 'Slider',
@@ -381,6 +422,7 @@ export const tables = [
         instance: sequelize.define('sliders',{
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             title: {
@@ -403,6 +445,7 @@ export const tables = [
         instance: sequelize.define('states',{
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             name: {
@@ -420,6 +463,7 @@ export const tables = [
         instance: sequelize.define('users',{
             id: {
                 type: Sequelize.INTEGER,
+                autoIncrement: true,
                 primaryKey: true
             },
             username: {

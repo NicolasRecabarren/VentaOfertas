@@ -4,6 +4,7 @@ import { sequelize } from '../database/connection';
 const State = sequelize.define('states',{
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     name: {

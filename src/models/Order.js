@@ -11,6 +11,7 @@ import PaymentMethod from './PaymentMethod';
 const Order = sequelize.define('orders',{
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     code: {

@@ -8,6 +8,7 @@ import District from './District';
 const Address = sequelize.define('addresses', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     street: {

@@ -6,6 +6,7 @@ import Role from './Role';
 const User = sequelize.define('users',{
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     username: {

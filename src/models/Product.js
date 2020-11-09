@@ -2,10 +2,12 @@ import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
 import ProductCategory from './ProductCategory';
+import ProductImage from './ProductImage';
 
 const Product = sequelize.define('products',{
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     // Código global del producto (SKU)
@@ -52,5 +54,6 @@ const Product = sequelize.define('products',{
 });
 
 Product.belongsTo(ProductCategory, { foreignKey: 'product_category_id' });
+Product.hasMany( ProductImage, { foreignKey: 'product_id' });
 
 export default Product;

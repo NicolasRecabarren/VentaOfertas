@@ -7,6 +7,7 @@ import Product from './Product';
 const OrderProduct = sequelize.define('order_products',{
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     quantity: {

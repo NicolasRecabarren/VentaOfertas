@@ -6,6 +6,7 @@ import Order from './Order';
 const OrderStep = sequelize.define('order_steps', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     name: {

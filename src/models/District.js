@@ -6,6 +6,7 @@ import Province from './Province';
 const District = sequelize.define('districts', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     name: {

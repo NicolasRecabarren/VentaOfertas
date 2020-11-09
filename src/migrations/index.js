@@ -13,7 +13,7 @@ async function createDatabaseTables(){
         if( tableA.order < tableB.order ) return -1;
         return 0;
     });
-    
+    //console.log(orderedTables);
     let steps = orderedTables.map( table => table.order );
     steps = [...new Set(steps)];
     

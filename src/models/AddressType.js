@@ -6,6 +6,7 @@ import Address from './Address';
 const AddressType = sequelize.define('address_types', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     name: {

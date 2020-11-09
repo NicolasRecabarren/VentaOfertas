@@ -4,6 +4,7 @@ import { sequelize } from '../database/connection';
 const Slider = sequelize.define('sliders',{
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     title: {
