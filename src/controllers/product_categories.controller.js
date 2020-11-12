@@ -10,14 +10,21 @@ const getCategories = async (req, res) => {
 
     let result = [];
     if( req.params.id === undefined ){
-        result = await ProductCategory.findAll();
+        result = await ProductCategory.findAll({
+            where: {product_category_id: null},
+            include: ProductCategory
+        });
     } else {
         const { id } = req.params;
         result = await ProductCategory.findOne({where: {id}});
     }
     
     res.status(200)
-        .json( {data: result} );
+        .json( {
+            data: result,
+            message: '',
+            error: false
+        } );
 }
 
 /**
@@ -27,7 +34,7 @@ const getCategories = async (req, res) => {
 **/
 const createCategory = async (req, res) => {
 
-    const { name, product_category_id } = req.body;
+    const { name, product_category_id, priority, icon } = req.body;
     
     try {
         // Si la categoría del producto viene en el JSON, debemos validar que esa categoría exista.
@@ -44,7 +51,20 @@ const createCategory = async (req, res) => {
         }
         
         // Creamos la categoría en la base de datos.
-        const createdCategory = await ProductCategory.create({ name, product_category_id }, {fields: ['name','product_category_id']});
+        const createdCategory = await ProductCategory.create({
+                name,
+                product_category_id,
+                priority,
+                icon
+            }, {
+                fields: [
+                    'name',
+                    'product_category_id',
+                    'priority',
+                    'icon'
+                ]
+            }
+        );
         if( createdCategory ){
             res.json({
                 message: 'Categoría creada correctamente.',
@@ -75,7 +95,7 @@ const updateCategory = async (req, res) => {
     }
 
     const { id } = req.params;
-    const { name, product_category_id } = req.body;
+    const { name, product_category_id, priority, icon } = req.body;
 
     try {
         if( product_category_id != null){
@@ -92,7 +112,15 @@ const updateCategory = async (req, res) => {
 
         const category = await ProductCategory.findOne({ where: {id}});
         if( category ){
-            await category.update({ name, product_category_id });
+            const updatedAt = new Date();
+            
+            await category.update({
+                name,
+                priority,
+                icon,
+                product_category_id,
+                updatedAt
+            });
             res.status(200).json({
                 message: `La categoría ha sido modificada correctamente.`,
                 data: category,

@@ -51,6 +51,10 @@ const Product = sequelize.define('Product',{
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    stock: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+    },
     createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

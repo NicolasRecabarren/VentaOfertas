@@ -395,6 +395,10 @@ export const tables = [
                 allowNull: false,
                 defaultValue: 0
             },
+            stock: {
+                type: Sequelize.INTEGER,
+                defaultValue: 0
+            },
             product_category_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false
@@ -431,6 +435,15 @@ export const tables = [
             name: {
                 type: Sequelize.STRING(100),
                 allowNull: false
+            },
+            icon: {
+                type: Sequelize.STRING(255),
+                defaultValue: null
+            },
+            priority: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: 1
             },
             product_category_id: {
                 type: Sequelize.INTEGER,

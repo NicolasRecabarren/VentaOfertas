@@ -13,6 +13,15 @@ const ProductCategory = sequelize.define('ProductCategory', {
         type: Sequelize.STRING(100),
         allowNull: false
     },
+    icon: {
+        type: Sequelize.STRING(255),
+        defaultValue: null
+    },
+    priority: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 1
+    },
     product_category_id: {
         type: Sequelize.INTEGER,
         allowNull: true
@@ -37,5 +46,6 @@ const ProductCategory = sequelize.define('ProductCategory', {
 });
 
 ProductCategory.hasMany(Product, { foreignKey: 'product_category_id' });
+ProductCategory.hasMany(ProductCategory, {foreignKey: 'product_category_id' });
 
 export default ProductCategory;
