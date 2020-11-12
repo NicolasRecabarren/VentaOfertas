@@ -4,9 +4,9 @@ const router = Router();
 
 const ProductsController = require('../controllers/products.controller');
 
-router.get('/:id?'    , ProductsController.getPosts );
-router.post('/'       , ProductsController.createPost );
-router.put('/:id?'    , ProductsController.updatePost );
-router.delete('/:id?' , ProductsController.deletePost );
+router.get('/:id?'    , ProductsController.getProducts );
+router.post('/'       , ProductsController.createProduct );
+router.put('/:id?'    , ProductsController.updateProduct );
+router.delete('/:id?' , ProductsController.deleteProduct );
 
 export default router;

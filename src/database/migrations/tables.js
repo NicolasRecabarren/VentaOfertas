@@ -10,7 +10,7 @@
 */
 
 import Sequelize from 'sequelize';
-import { sequelize } from '../database/connection';
+import { sequelize } from '../connection';
 
 export const tables = [
     {
@@ -19,7 +19,7 @@ export const tables = [
         belongsTo: [
             {modelName: 'AddressType', foreignKey: 'address_type_id'}
         ],
-        instance: sequelize.define('addresses', {
+        instance: sequelize.define('Address', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -46,13 +46,26 @@ export const tables = [
             district_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
             }
+        }, {
+            timestamps: false,
+            tableName: 'addresses'
         })
     },
     {
         name: 'AddressType',
         order: 1,
-        instance: sequelize.define('address_types', {
+        instance: sequelize.define('AddressType', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -62,7 +75,10 @@ export const tables = [
                 type: Sequelize.STRING(30),
                 allowNull: false
             }
-        },{ timestamps: false })
+        },{
+            timestamps: false,
+            tableName: 'address_types'
+        })
     },
     {
         name: 'Customer',
@@ -70,7 +86,7 @@ export const tables = [
         belongsTo: [
             {modelName: 'User', foreignKey: 'user_id'}
         ],
-        instance: sequelize.define('customers', {
+        instance: sequelize.define('Customer', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -91,7 +107,24 @@ export const tables = [
             user_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
+            },
+            deletedAt: {
+                type: Sequelize.DATE,
+                allowNull: true
             }
+        }, {
+            timestamps: false,
+            tableName: 'customers'
         })
     },
     {
@@ -100,7 +133,7 @@ export const tables = [
         belongsTo: [
             {modelName: 'Province', foreignKey: 'province_id'}
         ],
-        instance: sequelize.define('districts', {
+        instance: sequelize.define('District', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -115,14 +148,14 @@ export const tables = [
                 allowNull: false
             }
         },{
-            // Con esto evitamos que cree las columnas createdAt y updatedAt al realizar las migraciones.
-            timestamps: false
+            timestamps: false,
+            tableName: 'districts'
         })
     },
     {
         name: 'Dte',
         order: 3,
-        instance: sequelize.define('dtes', {
+        instance: sequelize.define('Dte', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -132,6 +165,8 @@ export const tables = [
                 type: Sequelize.INTEGER,
                 allowNull: false
             }
+        }, {
+            tableName: 'dtes'
         })
     },
     {
@@ -142,7 +177,7 @@ export const tables = [
             {modelName: 'OrderType', foreignKey: 'order_type_id'},
             {modelName: 'PaymentMethod', foreignKey: 'payment_method_id'},
         ],
-        instance: sequelize.define('orders',{
+        instance: sequelize.define('Order',{
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -176,14 +211,39 @@ export const tables = [
                 type: Sequelize.INTEGER,
                 allowNull: false
             },
+            order_step_id: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: 1
+            },
             order_type_id: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                allowNull: false,
+                defaultValue: 1
             },
             payment_method_id: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                allowNull: false,
+                defaultValue: 1
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
+            },
+            deletedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
             }
+        },{
+            timestamps: false,
+            tableName: 'orders'
         })
     },
     {
@@ -193,7 +253,7 @@ export const tables = [
             {modelName: 'Product', foreignKey: 'product_id'},
             {modelName: 'Order', foreignKey: 'order_id'}
         ],
-        instance: sequelize.define('order_products',{
+        instance: sequelize.define('OrderProduct',{
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -218,28 +278,44 @@ export const tables = [
             order_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
             }
+        },{
+            timestamps: false,
+            tableName: 'order_products'
         })
     },
     {
         name: 'OrderStep',
         order: 1,
-        instance: sequelize.define('order_steps', {
+        instance: sequelize.define('OrderStep', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
                 primaryKey: true
             },
             name: {
-                type: Sequelize.STRING(20),
+                type: Sequelize.STRING(50),
                 allowNull: false
             }
+        },{
+            timestamps: false,
+            tableName: 'order_steps'
         })
     },
     {
         name: 'OrderType',
         order: 1,
-        instance: sequelize.define('order_types', {
+        instance: sequelize.define('OrderType', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -249,30 +325,36 @@ export const tables = [
                 type: Sequelize.STRING(100),
                 allowNull: false
             }
+        },{
+            timestamps: false,
+            tableName: 'order_types'
         })
     },
     {
         name: 'PaymentMethod',
         order: 1,
-        instance: sequelize.define('payment_methods', {
+        instance: sequelize.define('PaymentMethod', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
                 primaryKey: true
             },
             name: {
-                type: Sequelize.STRING(20),
+                type: Sequelize.STRING(50),
                 allowNull: false
             },
             api_key: {
                 type: Sequelize.STRING
             }
+        },{
+            timestamps: false,
+            tableName: 'payment_methods'
         })
     },
     {
         name: 'Product',
         order: 3,
-        instance: sequelize.define('products',{
+        instance: sequelize.define('Product',{
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -316,13 +398,31 @@ export const tables = [
             product_category_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
+            },
+            deletedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
             }
+        },{
+            timestamps: false,
+            tableName: 'products'
         })
     },
     {
         name: 'ProductCategory',
         order: 1,
-        instance: sequelize.define('product_categories', {
+        instance: sequelize.define('ProductCategory', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -331,9 +431,28 @@ export const tables = [
             name: {
                 type: Sequelize.STRING(100),
                 allowNull: false
+            },
+            product_category_id: {
+                type: Sequelize.INTEGER,
+                allowNull: true
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
+            },
+            deletedAt: {
+                type: Sequelize.DATE,
+                allowNull: true
             }
         }, {
-            timestamps: false
+            timestamps: false,
+            tableName: 'product_categories'
         })
     },
     {
@@ -342,7 +461,7 @@ export const tables = [
         belongsTo: [
             {modelName: 'Product', foreignKey: 'product_id'}
         ],
-        instance: sequelize.define('product_images', {
+        instance: sequelize.define('ProductImage', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -358,12 +477,15 @@ export const tables = [
                 type: Sequelize.INTEGER,
                 allowNull: false
             }
-        }, {timestamps: false})
+        }, {
+            timestamps: false,
+            tableName: 'product_images'
+        })
     },
     {
         name: 'ProductType',
         order: 1,
-        instance: sequelize.define('product_types', {
+        instance: sequelize.define('ProductType', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -376,7 +498,10 @@ export const tables = [
             description: {
                 type: Sequelize.STRING(255)
             }
-        },{ timestamps: false })
+        },{
+            timestamps: false,
+            tableName: 'product_types'
+        })
     },
     {
         name: 'Province',
@@ -384,7 +509,7 @@ export const tables = [
         belongsTo: [
             {modelName: 'State', foreignKey: 'state_id'}
         ],
-        instance: sequelize.define('provinces', {
+        instance: sequelize.define('Province', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -397,12 +522,15 @@ export const tables = [
             state_id: {
                 type: Sequelize.INTEGER
             }
-        },{ timestamps: false })
+        },{
+            timestamps: false,
+            tableName: 'provinces'
+        })
     },
     {
         name: 'Role',
         order: 1,
-        instance: sequelize.define('roles', {
+        instance: sequelize.define('Role', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -413,13 +541,14 @@ export const tables = [
                 allowNull: false
             }
         }, {
+            tableName: 'roles',
             timestamps: false
         })
     },
     {
         name: 'Slider',
         order: 1,
-        instance: sequelize.define('sliders',{
+        instance: sequelize.define('Slider',{
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -437,12 +566,15 @@ export const tables = [
             link: {
                 type: Sequelize.STRING(255)
             }
+        },{
+            timestamps: false,
+            tableName: 'sliders'
         })
     },
     {
         name: 'State',
         order: 1,
-        instance: sequelize.define('states',{
+        instance: sequelize.define('State',{
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -452,7 +584,10 @@ export const tables = [
                 type: Sequelize.STRING(50),
                 allowNull: false
             }
-        },{ timestamps: false })
+        },{
+            timestamps: false,
+            tableName: 'states'
+        })
     },
     {
         name: 'User',
@@ -460,7 +595,7 @@ export const tables = [
         belongsTo: [
             {modelName: 'Role', foreignKey: 'role_id'}
         ],
-        instance: sequelize.define('users',{
+        instance: sequelize.define('User',{
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -482,7 +617,25 @@ export const tables = [
             role_id: {
                 type: Sequelize.INTEGER,
                 defaultValue: 2
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
+            },
+            deletedAt: {
+                type: Sequelize.DATE,
+                allowNull: true,
+                defaultValue: null
             }
+        },{
+            timestamps: false,
+            tableName: 'users'
         })
     }
 ];

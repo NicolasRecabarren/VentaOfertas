@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-const Dte = sequelize.define('dtes', {
+const Dte = sequelize.define('Dte', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -11,6 +11,8 @@ const Dte = sequelize.define('dtes', {
         type: Sequelize.INTEGER,
         allowNull: false
     }
+}, {
+    tableName: 'dtes'
 });
 
 export default Dte;

@@ -4,7 +4,7 @@ import { sequelize } from '../database/connection';
 import Order from './Order';
 import Product from './Product';
 
-const OrderProduct = sequelize.define('order_products',{
+const OrderProduct = sequelize.define('OrderProduct',{
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -31,7 +31,20 @@ const OrderProduct = sequelize.define('order_products',{
     order_id: {
         type: Sequelize.INTEGER,
         allowNull: false
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
     }
+},{
+    timestamps: false,
+    tableName: 'order_products'
 });
 
 OrderProduct.belongsTo(Product, { foreignKey: 'product_id' });

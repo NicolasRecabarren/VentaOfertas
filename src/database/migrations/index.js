@@ -73,6 +73,7 @@ async function dropDatabaseTables(){
 }
 
 async function doSynchronization(){
+    console.info("Synchronizing database...");
     await dropDatabaseTables();
     
     createDatabaseTables().then(

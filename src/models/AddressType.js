@@ -3,7 +3,7 @@ import { sequelize } from '../database/connection';
 
 import Address from './Address';
 
-const AddressType = sequelize.define('address_types', {
+const AddressType = sequelize.define('AddressType', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -15,7 +15,8 @@ const AddressType = sequelize.define('address_types', {
     }
 },{
     // Con esto evitamos que cree las columnas createdAt y updatedAt al realizar las migraciones.
-    timestamps: false
+    timestamps: false,
+    tableName: 'address_types'
 });
 
 AddressType.hasMany(Address, {foreignKey: 'address_type_id'} );

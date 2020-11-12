@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-const State = sequelize.define('states',{
+const State = sequelize.define('State',{
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -12,8 +12,8 @@ const State = sequelize.define('states',{
         allowNull: false
     }
 },{
-    // Con esto evitamos que cree las columnas createdAt y updatedAt al realizar las migraciones.
-    timestamps: false
+    timestamps: false,
+    tableName: 'states'
 });
 
 export default State;

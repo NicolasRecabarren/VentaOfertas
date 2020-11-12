@@ -4,7 +4,7 @@ import { sequelize } from '../database/connection';
 import ProductCategory from './ProductCategory';
 import ProductImage from './ProductImage';
 
-const Product = sequelize.define('products',{
+const Product = sequelize.define('Product',{
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -50,10 +50,28 @@ const Product = sequelize.define('products',{
     product_category_id: {
         type: Sequelize.INTEGER,
         allowNull: false
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
     }
+},{
+    timestamps: false,
+    tableName: 'products'
 });
 
-Product.belongsTo(ProductCategory, { foreignKey: 'product_category_id' });
+//Product.belongsTo(ProductCategory, { foreignKey: 'product_category_id' });
 Product.hasMany( ProductImage, { foreignKey: 'product_id' });
 
 export default Product;

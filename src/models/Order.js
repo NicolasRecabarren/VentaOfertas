@@ -8,7 +8,7 @@ import OrderStep from './OrderStep';
 import OrderType from './OrderType';
 import PaymentMethod from './PaymentMethod';
 
-const Order = sequelize.define('orders',{
+const Order = sequelize.define('Order',{
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -56,7 +56,25 @@ const Order = sequelize.define('orders',{
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 1
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
     }
+},{
+    timestamps: false,
+    tableName: 'orders'
 });
 
 Order.belongsTo( Customer , {foreignKey: 'customer_id'  });

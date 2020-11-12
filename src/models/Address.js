@@ -5,7 +5,7 @@ import AddressType from './AddressType';
 import Customer from './Customer';
 import District from './District';
 
-const Address = sequelize.define('addresses', {
+const Address = sequelize.define('Address', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -32,7 +32,20 @@ const Address = sequelize.define('addresses', {
     district_id: {
         type: Sequelize.INTEGER,
         allowNull: false
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
     }
+}, {
+    timestamps: false,
+    tableName: 'addresses'
 });
 
 Address.belongsTo(AddressType, { foreignKey: 'address_type_id' });

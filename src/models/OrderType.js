@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-const OrderType = sequelize.define('order_types', {
+const OrderType = sequelize.define('OrderType', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -11,6 +11,9 @@ const OrderType = sequelize.define('order_types', {
         type: Sequelize.STRING(100),
         allowNull: false
     }
+},{
+    timestamps: false,
+    tableName: 'order_types'
 });
 
 export default OrderType;

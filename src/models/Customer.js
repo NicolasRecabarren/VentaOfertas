@@ -5,7 +5,7 @@ import Address from './Address';
 import Order from './Order';
 import User from './User';
 
-const Customer = sequelize.define('customers', {
+const Customer = sequelize.define('Customer', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -26,7 +26,24 @@ const Customer = sequelize.define('customers', {
     user_id: {
         type: Sequelize.INTEGER,
         allowNull: false
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true
     }
+}, {
+    timestamps: false,
+    tableName: 'customers'
 });
 
 Customer.belongsTo(User, { foreignKey: 'user_id' });

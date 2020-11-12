@@ -3,7 +3,7 @@ import { sequelize } from '../database/connection';
 
 import Role from './Role';
 
-const User = sequelize.define('users',{
+const User = sequelize.define('User',{
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -25,9 +25,25 @@ const User = sequelize.define('users',{
     role_id: {
         type: Sequelize.INTEGER,
         defaultValue: 2
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
     }
 },{
-    //timestamps: false
+    timestamps: false,
+    tableName: 'users'
 });
 
 User.belongsTo(Role, { foreignKey: 'role_id' });

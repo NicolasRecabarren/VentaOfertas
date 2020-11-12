@@ -8,7 +8,7 @@
     "build": "babel src --out-dir dist",
     "dev": "nodemon src/index.js --exec babel-node",
     "start": "node dist/index.js",
-    "sync_db": "node -r esm src/migrations/index.js"
+    "sync_db": "node -r esm src/database/migrations/index.js && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",

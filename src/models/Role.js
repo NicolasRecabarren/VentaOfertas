@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-const Role = sequelize.define('roles', {
+const Role = sequelize.define('Role', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -12,6 +12,7 @@ const Role = sequelize.define('roles', {
         allowNull: false
     }
 }, {
+    tableName: 'roles',
     timestamps: false
 });
 

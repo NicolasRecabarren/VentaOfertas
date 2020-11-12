@@ -1,10 +1,9 @@
-import { SqlError } from 'mariadb';
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
 import State from './State';
 
-const Province = sequelize.define('provinces', {
+const Province = sequelize.define('Province', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -19,7 +18,8 @@ const Province = sequelize.define('provinces', {
     }
 },{
     // Con esto evitamos que cree las columnas createdAt y updatedAt al realizar las migraciones.
-    timestamps: false
+    timestamps: false,
+    tableName: 'provinces'
 });
 
 Province.belongsTo(State, { foreignKey: 'state_id' });

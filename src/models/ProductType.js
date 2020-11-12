@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-const ProductType = sequelize.define('product_types', {
+const ProductType = sequelize.define('ProductType', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -16,7 +16,8 @@ const ProductType = sequelize.define('product_types', {
     }
 },{
     // Con esto evitamos que cree las columnas createdAt y updatedAt al realizar las migraciones.
-    timestamps: false
+    timestamps: false,
+    tableName: 'product_types'
 });
 
 export default ProductType;
