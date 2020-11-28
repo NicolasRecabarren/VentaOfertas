@@ -1,7 +1,6 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
-
-import Role from './Role';
+import bcrypt from 'bcrypt';
 
 const User = sequelize.define('User',{
     id: {
@@ -28,8 +27,8 @@ const User = sequelize.define('User',{
     },
     createdAt: {
         type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW
+        allowNull: true,
+        defaultValue: null
     },
     updatedAt: {
         type: Sequelize.DATE,
@@ -43,9 +42,27 @@ const User = sequelize.define('User',{
     }
 },{
     timestamps: false,
-    tableName: 'users'
+    tableName: 'users',
+    hooks: {
+        beforeCreate: async (user, options) => {
+            user.password = await user.hashPassword(user.password);
+        },
+        beforeUpdate: async (user, options) => {
+            if(user.password != ''){
+                user.password = await user.hashPassword(user.password);
+            } else {
+                delete user.dataValues.password;
+            }
+        }
+    }
 });
 
-User.belongsTo(Role, { foreignKey: 'role_id' });
+User.prototype.hashPassword = async (password) => {
+    return await bcrypt.hash(password, bcrypt.genSaltSync(10));
+};
+
+User.getUserByUsername = async (username) => {
+    return await User.findOne({where: {username}});
+};
 
 export default User;

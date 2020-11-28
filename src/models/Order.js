@@ -1,12 +1,12 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-import Customer from './Customer';
+/*import Customer from './Customer';
 import Dte from './Dte';
 import OrderProduct from './OrderProduct';
 import OrderStep from './OrderStep';
 import OrderType from './OrderType';
-import PaymentMethod from './PaymentMethod';
+import PaymentMethod from './PaymentMethod';*/
 
 const Order = sequelize.define('Order',{
     id: {
@@ -77,11 +77,11 @@ const Order = sequelize.define('Order',{
     tableName: 'orders'
 });
 
-Order.belongsTo( Customer , {foreignKey: 'customer_id'  });
+/*Order.belongsTo( Customer , {foreignKey: 'customer_id'  });
 Order.belongsTo( OrderType, {foreignKey: 'order_type_id'});
 Order.belongsTo( OrderStep, {foreignKey: 'order_step_id'});
 Order.belongsTo( PaymentMethod, {foreignKey: 'payment_method_id' });
 Order.hasOne( Dte, {foreignKey: 'order_id', sourceKey: 'id' });
-Order.hasMany(OrderProduct, {foreignKey: 'order_id' });
+Order.hasMany(OrderProduct, {foreignKey: 'order_id' });*/
 
 export default Order;

@@ -1,14 +1,11 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-import ProductCategory from './ProductCategory';
-import ProductImage from './ProductImage';
-
 const Product = sequelize.define('Product',{
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     // Código global del producto (SKU)
     sku: {
@@ -51,6 +48,9 @@ const Product = sequelize.define('Product',{
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    brand_id: {
+        type: Sequelize.INTEGER
+    },
     stock: {
         type: Sequelize.INTEGER,
         defaultValue: 0
@@ -74,8 +74,5 @@ const Product = sequelize.define('Product',{
     timestamps: false,
     tableName: 'products'
 });
-
-//Product.belongsTo(ProductCategory, { foreignKey: 'product_category_id' });
-Product.hasMany( ProductImage, { foreignKey: 'product_id' });
 
 export default Product;

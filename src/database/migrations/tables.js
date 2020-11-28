@@ -63,6 +63,24 @@ export const tables = [
         })
     },
     {
+        name: 'Brand',
+        order: 1,
+        instance: sequelize.define('brands', {
+            id: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            name: {
+                type: Sequelize.STRING(255),
+                allowNull: false
+            }
+        }, {
+            timestamps: false,
+            tableName: 'brands'
+        })
+    },
+    {
         name: 'AddressType',
         order: 1,
         instance: sequelize.define('AddressType', {
@@ -357,8 +375,8 @@ export const tables = [
         instance: sequelize.define('Product',{
             id: {
                 type: Sequelize.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
             sku: {
                 type: Sequelize.STRING,
@@ -395,13 +413,16 @@ export const tables = [
                 allowNull: false,
                 defaultValue: 0
             },
-            stock: {
-                type: Sequelize.INTEGER,
-                defaultValue: 0
-            },
             product_category_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false
+            },
+            brand_id: {
+                type: Sequelize.INTEGER
+            },
+            stock: {
+                type: Sequelize.INTEGER,
+                defaultValue: 0
             },
             createdAt: {
                 type: Sequelize.DATE,
@@ -493,27 +514,6 @@ export const tables = [
         }, {
             timestamps: false,
             tableName: 'product_images'
-        })
-    },
-    {
-        name: 'ProductType',
-        order: 1,
-        instance: sequelize.define('ProductType', {
-            id: {
-                type: Sequelize.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
-            },
-            name: {
-                type: Sequelize.STRING(30),
-                allowNull: false
-            },
-            description: {
-                type: Sequelize.STRING(255)
-            }
-        },{
-            timestamps: false,
-            tableName: 'product_types'
         })
     },
     {

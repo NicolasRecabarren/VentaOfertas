@@ -1,23 +1,19 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-//import Order from './Order';
-
-const OrderStep = sequelize.define('OrderStep', {
+const Brand = sequelize.define('Brand', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
     name: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(255),
         allowNull: false
     }
-},{
+}, {
     timestamps: false,
-    tableName: 'order_steps'
+    tableName: 'brands'
 });
 
-//OrderStep.hasMany(Order, {foreignKey: 'order_step_id'} );
-
-export default OrderStep;
+export default Brand;

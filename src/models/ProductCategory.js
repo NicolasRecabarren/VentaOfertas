@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-import Product from './Product';
+//import Product from './Product';
 
 const ProductCategory = sequelize.define('ProductCategory', {
     id: {
@@ -45,7 +45,7 @@ const ProductCategory = sequelize.define('ProductCategory', {
     tableName: 'product_categories'
 });
 
-ProductCategory.hasMany(Product, { foreignKey: 'product_category_id' });
-ProductCategory.hasMany(ProductCategory, {foreignKey: 'product_category_id' });
+/*ProductCategory.hasMany(Product, { foreignKey: 'product_category_id' });
+ProductCategory.hasMany(ProductCategory, {foreignKey: 'product_category_id' });*/
 
 export default ProductCategory;

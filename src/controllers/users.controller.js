@@ -1,4 +1,5 @@
-import User from '../models/User';
+import response from './response.controller';
+import { User, Role } from '../models';
 
 /**
     Método que obtiene los usuarios del sistema.
@@ -15,9 +16,8 @@ const getUsers = async (req, res) => {
         const { id } = req.params;
         result = await User.findOne({where: {id}});
     }
-    
-    res.status(200)
-        .json( {data: result} );
+
+    return response.sendJson(res, 'Información recuperada.', result, 200);
 }
 
 /**
@@ -26,25 +26,31 @@ const getUsers = async (req, res) => {
     Method: POST
 **/
 const createUser = async (req, res) => {
-
-    const { username, password, active, role_id } = req.body;
-
     try {
-        //Falta fecha de creación
-        const createdUser = await User.create({ username, password, active, role_id }, {fields: ['username', 'password', 'active', 'role_id']});
+        const { username, password, active, role_id } = req.body;
+
+        // Validaremos que el rol exista.
+        const role = await Role.findOne({where: {id: role_id}});
+        if( !role )
+            return response.sendJson(res, 'El rol indicado no es válido.');
+
+        // Validamos que el usuario no exista aún en la base de datos.
+        const validaUnique = await User.getUserByUsername(username);
+        if(validaUnique)
+            return response.sendJson(res, 'El usuario ya está registrado.');
+        
+        const createdAt = new Date();
+        const createdUser = await User.create(
+            { username, password, active, role_id, createdAt }, 
+            { fields: ['username', 'password', 'active', 'role_id', 'createdAt']}
+        );
+
         if( createdUser ){
-            res.json({
-                message: 'Usuario creado.',
-                data: createdUser
-            });
+            return response.sendJson(res, `Usuario creado correctamente.`, createdUser, 200);
         }
     } catch (error) {
         console.log(error);
-
-        res.json({
-            message: 'No se ha guardado el usuario.',
-            data: {}
-        });
+        return response.sendJson(res, 'No se ha guardado el usuario.');
     }
 }
 
@@ -53,39 +59,31 @@ const createUser = async (req, res) => {
     Ruta: '/api/users/:id?'
 **/
 const updateUser = async (req, res) => {
-    if( req.params.id === undefined ){
-        res.status(404).json({
-            message: 'Usuario no encontrado.'
-        });
-
-    } else {
+    if( req.params.id === undefined )
+        return response.sendJson(res, 'El ID no ha sido especificado.', {}, 404);
+    
+    try {
         const { id } = req.params;
         const { username, password, active, role_id } = req.body;
 
-        try {
-            const user = await User.findOne({ where: {id}});
-
-            if( user ){
-                await user.update({ username, password, active, role_id });
-                res.status(200).json({
-                    message: `El usuario ha sido modificado correctamente.`,
-                    data: user
-                });
-            } else {
-                res.status(404).json({
-                    message: `Usuario no encontrado.`,
-                    data: {}
-                });
-            }
-            
-        } catch (error) {
-            console.log(error);
-
-            res.json({
-                message: 'No se ha guardado el usuario.',
-                data: {}
-            });
+        // Validamos que el usuario exista.
+        const user = await User.findOne({ where: {id}});
+        if( !user ){
+            return response.sendJson(res, 'Usuario no encontrado.', {}, 404);
         }
+
+        // Validaremos que el rol exista.
+        const role = await Role.findOne({where: {id: role_id}});
+        if( !role ){
+            return response.sendJson(res, 'El rol indicado no es válido.');
+        }
+        
+        await user.update({ username, password, active, role_id, updatedAt: new Date() });
+        return response.sendJson(res, `El usuario ha sido modificado correctamente.`, user, 200);
+        
+    } catch (error) {
+        console.log(error);
+        return response.sendJson(res, 'No se ha guardado el usuario.');
     }
 }
 
@@ -96,28 +94,30 @@ const updateUser = async (req, res) => {
     Method: DELETE
 **/
 const deleteUser = async (req, res) => {
-    if( req.params.id === undefined ){
-        res.status(404).json({
-            message: 'Usuario no encontrado.'
-        });
-    } else {
+    if( req.params.id === undefined )
+        return response.sendJson(res, 'El ID no ha sido especificado.', {}, 404);
+
+    try {
         const {id} = req.params;
-
-        try {
-            const affectedRows = await User.destroy({ where: {id}});
-
-            res.status(200).json({
-                message: `El usuario ha sido eliminado correctamente.`,
-                affectedRows
-            });
-        } catch (error) {
-            console.log(error);
-
-            res.json({
-                message: 'No se ha podido eliminar al usuario.',
-                data: {}
-            });
+        // Validamos que el usuario exista.
+        const user = await User.findOne({ where: {id}});
+        if( !user ){
+            return response.sendJson(res, 'Usuario no encontrado.', {}, 404);
         }
+
+        const deletedAt = user.deletedAt === null ? new Date() : null;
+        await user.update({ deletedAt });
+
+        return response.sendJson(res, 
+            deletedAt === null ?
+                `El usuario ha sido activado correctamente.` :
+                'El usuario ha sido desactivado correctamente.',
+            user, 200
+        );
+        
+    } catch (error) {
+        console.log(error);
+        return response.sendJson(res, 'No se ha podido eliminar el usuario.');
     }
 }
 

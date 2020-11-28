@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-import State from './State';
+//import State from './State';
 
 const Province = sequelize.define('Province', {
     id: {
@@ -22,6 +22,6 @@ const Province = sequelize.define('Province', {
     tableName: 'provinces'
 });
 
-Province.belongsTo(State, { foreignKey: 'state_id' });
+//Province.belongsTo(State, { foreignKey: 'state_id' });
 
 export default Province;
