@@ -59,6 +59,7 @@ const createCategory = async (req, res) => {
 /**
     Método que actualiza una categoría de productos en la base de datos.
     Ruta: '/api/product_categories/:id?'
+    Method: PUT
 **/
 const updateCategory = async (req, res) => {
     if( req.params.id === undefined )

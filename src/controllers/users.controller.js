@@ -57,6 +57,7 @@ const createUser = async (req, res) => {
 /**
     Método que actualiza un usuario en la base de datos.
     Ruta: '/api/users/:id?'
+    Method: PUT
 **/
 const updateUser = async (req, res) => {
     if( req.params.id === undefined )

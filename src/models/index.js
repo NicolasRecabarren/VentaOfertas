@@ -31,6 +31,7 @@ Order.belongsTo( OrderStep       , { foreignKey: 'order_step_id'        });
 Order.belongsTo( PaymentMethod   , { foreignKey: 'payment_method_id'    });
 OrderProduct.belongsTo(Product   , { foreignKey: 'product_id'           });
 OrderProduct.belongsTo(Order     , { foreignKey: 'order_id'             });
+Product.belongsTo(Brand          , { foreignKey: 'brand_id'             });
 Product.belongsTo(ProductCategory, { foreignKey: 'product_category_id'  });
 ProductImage.belongsTo( Product  , { foreignKey: 'product_id'           });
 Province.belongsTo(State         , { foreignKey: 'state_id'             });
