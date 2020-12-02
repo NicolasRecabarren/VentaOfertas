@@ -1,13 +1,13 @@
-require('dotenv').config();
+//require('dotenv').config();
 
 import Sequelize from 'sequelize';
 
 export const sequelize = new Sequelize(
-    process.env.DB_NAME, // DB name
-    process.env.DB_USERNAME, // username
-    process.env.DB_PASSWORD, // password
+    'sql10379644', // DB name
+    'sql10379644', // username
+    'HQADfBf3I4', // password
     {
-        host: process.env.DB_HOST, // Database IP
+        host: 'sql10.freemysqlhosting.net', // Database IP
         dialect: 'mysql',
         /*pool: {
             max: 5,
