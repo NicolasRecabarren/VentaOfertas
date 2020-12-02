@@ -1,8 +1,9 @@
 import app from './app';
 
 async function runServer(){
-    await app.listen(3000);
-    console.log('Server on port 3000')
+    const port = process.env.PORT || 80;
+    await app.listen(port);
+    console.log(`Server on port ${port}`);
 };
 
 runServer();
