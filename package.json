@@ -7,13 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --out-dir dist",
     "dev": "nodemon src/index.js --exec babel-node --mode local",
-    "start": "nodemon src/index.js --exec babel-node",
+    "start": "node dist/index.js",
     "sync_db": "node -r esm src/database/migrations/index.js && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/polyfill": "^7.12.1",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
