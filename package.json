@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --out-dir dist",
     "dev": "nodemon src/index.js --exec babel-node --mode local",
-    "start": "node dist/index.js",
+    "start": "babel src --out-dir dist && node dist/index.js",
     "sync_db": "node -r esm src/database/migrations/index.js && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
