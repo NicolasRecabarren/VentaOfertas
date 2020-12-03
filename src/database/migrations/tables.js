@@ -50,7 +50,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -129,7 +129,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -247,7 +247,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -300,7 +300,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -427,7 +427,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -473,7 +473,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -627,6 +627,11 @@ export const tables = [
                 type: Sequelize.BOOLEAN,
                 defaultValue: true
             },
+            session_token: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+                defaultValue: null
+            },
             role_id: {
                 type: Sequelize.INTEGER,
                 defaultValue: 2
@@ -634,7 +639,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,

@@ -19,6 +19,11 @@ const getRoles = async (req, res) => {
     return response.sendJson(res, 'Información recuperada.', result, 200);
 };
 
+const checkIfRoleExists = async (role_id) => {
+    return await Role.findOne({where: {id: role_id}});
+}
+
 module.exports = {
-    getRoles
+    getRoles,
+    checkIfRoleExists
 }

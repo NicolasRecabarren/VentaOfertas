@@ -21,6 +21,11 @@ const User = sequelize.define('User',{
         type: Sequelize.BOOLEAN,
         defaultValue: true
     },
+    session_token: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        defaultValue: null
+    },
     role_id: {
         type: Sequelize.INTEGER,
         defaultValue: 2
@@ -58,11 +63,27 @@ const User = sequelize.define('User',{
 });
 
 User.prototype.hashPassword = async (password) => {
-    return await bcrypt.hash(password, bcrypt.genSaltSync(10));
+    return await bcrypt.hash(password, process.env.SECURITY_SALT);
 };
 
 User.getUserByUsername = async (username) => {
     return await User.findOne({where: {username}});
+};
+
+User.validateCredentials = async (username, password) => {
+    const auxUser = await User.build();
+    const hashedPassword = await auxUser.hashPassword(password);
+
+    return await User.findOne({
+        where: { username, password: hashedPassword }
+    });
+}
+
+User.generateSessionToken = async (user) => {
+    const token = await bcrypt.genSalt(20);
+    await user.update({session_token: token});
+
+    return token;
 };
 
 export default User;

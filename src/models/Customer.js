@@ -43,11 +43,15 @@ const Customer = sequelize.define('Customer', {
     }
 }, {
     timestamps: false,
-    tableName: 'customers'
+    tableName: 'customers',
+    hooks: {
+        beforeCreate: async (customer, options) => {
+            customer.rut = customer.rut.replace(/\./g,'');
+        },
+        beforeUpdate: async (customer, options) => {
+            customer.rut = customer.rut.replace(/\./g,'');
+        }
+    }
 });
-
-/*Customer.belongsTo(User, { foreignKey: 'user_id' });
-Customer.hasMany(Address, { foreignKey: 'customer_id' });
-Customer.hasMany(Order, { foreignKey: 'customer_id' });*/
 
 export default Customer;

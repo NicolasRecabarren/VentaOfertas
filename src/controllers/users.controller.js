@@ -1,4 +1,5 @@
 import response from './response.controller';
+import { checkIfRoleExists } from './roles.controller';
 import { User, Role } from '../models';
 
 /**
@@ -30,28 +31,24 @@ const createUser = async (req, res) => {
         const { username, password, active, role_id } = req.body;
 
         // Validaremos que el rol exista.
-        const role = await Role.findOne({where: {id: role_id}});
-        if( !role )
+        if( await checkIfRoleExists(role_id) === null ){
             return response.sendJson(res, 'El rol indicado no es válido.');
+        }
 
         // Validamos que el usuario no exista aún en la base de datos.
         const validaUnique = await User.getUserByUsername(username);
         if(validaUnique)
             return response.sendJson(res, 'El usuario ya está registrado.');
         
-        const createdAt = new Date();
-        const createdUser = await User.create(
-            { username, password, active, role_id, createdAt }, 
-            { fields: ['username', 'password', 'active', 'role_id', 'createdAt']}
-        );
-
+        const createdUser = await createUserInDB({ username, password, active, role_id });
+        
         if( createdUser ){
             return response.sendJson(res, `Usuario creado correctamente.`, createdUser, 200);
         }
     } catch (error) {
         console.log(error);
-        return response.sendJson(res, 'No se ha guardado el usuario.');
     }
+    return response.sendJson(res, 'No se ha guardado el usuario.');
 }
 
 /**
@@ -74,8 +71,7 @@ const updateUser = async (req, res) => {
         }
 
         // Validaremos que el rol exista.
-        const role = await Role.findOne({where: {id: role_id}});
-        if( !role ){
+        if( await checkIfRoleExists(role_id) === null ){
             return response.sendJson(res, 'El rol indicado no es válido.');
         }
         
@@ -122,9 +118,50 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const createUserInDB = async (user) => {
+    try {
+        if( Object.keys(user).indexOf('createdAt') === -1 )
+            user['createdAt'] = new Date();
+        
+        return await User.create(
+            user, 
+            { fields: ['username', 'password', 'active', 'role_id', 'createdAt']}
+        );
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+};
+
+const login = async (req, res) => {
+    let foundUser = await User.validateCredentials(req.body.username, req.body.password);
+    if( !foundUser )
+        return response.sendJson(res, 'El nombre de usuario o contraseña no son correctos.');
+    
+    if( !foundUser.active || foundUser.deletedAt !== null )
+        return response.sendJson(res, 'El usuario no se encuentra habilitado para iniciar sesión.');
+
+    const token = await User.generateSessionToken(foundUser);
+    foundUser = foundUser.toJSON();
+    foundUser.session_token = token;
+
+    return response.sendJson(res, 'Inicio de sesión correcto.', {
+        api_token: process.env.API_KEY,
+        user: foundUser
+    }, 200);
+}
+
+const logout = async (req, res) => {
+
+    return response.sendJson(res);
+};
+
 module.exports = {
     getUsers,
     createUser,
+    createUserInDB,
+    login,
+    logout,
     updateUser,
     deleteUser
 }
