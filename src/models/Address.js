@@ -1,9 +1,9 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-import AddressType from './AddressType';
+/*import AddressType from './AddressType';
 import Customer from './Customer';
-import District from './District';
+import District from './District';*/
 
 const Address = sequelize.define('Address', {
     id: {
@@ -48,8 +48,8 @@ const Address = sequelize.define('Address', {
     tableName: 'addresses'
 });
 
-Address.belongsTo(AddressType, { foreignKey: 'address_type_id' });
+/*Address.belongsTo(AddressType, { foreignKey: 'address_type_id' });
 Address.belongsTo(District, { foreignKey: 'district_id' });
-Address.belongsTo(Customer, { foreignKey: 'customer_id' });
+Address.belongsTo(Customer, { foreignKey: 'customer_id' });*/
 
 export default Address;

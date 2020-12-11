@@ -50,7 +50,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -60,6 +60,24 @@ export const tables = [
         }, {
             timestamps: false,
             tableName: 'addresses'
+        })
+    },
+    {
+        name: 'Brand',
+        order: 1,
+        instance: sequelize.define('brands', {
+            id: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            name: {
+                type: Sequelize.STRING(255),
+                allowNull: false
+            }
+        }, {
+            timestamps: false,
+            tableName: 'brands'
         })
     },
     {
@@ -111,7 +129,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -229,7 +247,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -282,7 +300,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -357,8 +375,8 @@ export const tables = [
         instance: sequelize.define('Product',{
             id: {
                 type: Sequelize.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
             sku: {
                 type: Sequelize.STRING,
@@ -399,10 +417,17 @@ export const tables = [
                 type: Sequelize.INTEGER,
                 allowNull: false
             },
+            brand_id: {
+                type: Sequelize.INTEGER
+            },
+            stock: {
+                type: Sequelize.INTEGER,
+                defaultValue: 0
+            },
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -432,6 +457,15 @@ export const tables = [
                 type: Sequelize.STRING(100),
                 allowNull: false
             },
+            icon: {
+                type: Sequelize.STRING(255),
+                defaultValue: null
+            },
+            priority: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: 1
+            },
             product_category_id: {
                 type: Sequelize.INTEGER,
                 allowNull: true
@@ -439,7 +473,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,
@@ -480,27 +514,6 @@ export const tables = [
         }, {
             timestamps: false,
             tableName: 'product_images'
-        })
-    },
-    {
-        name: 'ProductType',
-        order: 1,
-        instance: sequelize.define('ProductType', {
-            id: {
-                type: Sequelize.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
-            },
-            name: {
-                type: Sequelize.STRING(30),
-                allowNull: false
-            },
-            description: {
-                type: Sequelize.STRING(255)
-            }
-        },{
-            timestamps: false,
-            tableName: 'product_types'
         })
     },
     {
@@ -614,6 +627,11 @@ export const tables = [
                 type: Sequelize.BOOLEAN,
                 defaultValue: true
             },
+            session_token: {
+                type: Sequelize.TEXT,
+                allowNull: true,
+                defaultValue: null
+            },
             role_id: {
                 type: Sequelize.INTEGER,
                 defaultValue: 2
@@ -621,7 +639,7 @@ export const tables = [
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()')
+                defaultValue: null
             },
             updatedAt: {
                 type: Sequelize.DATE,

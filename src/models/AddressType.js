@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-import Address from './Address';
+//import Address from './Address';
 
 const AddressType = sequelize.define('AddressType', {
     id: {
@@ -19,6 +19,6 @@ const AddressType = sequelize.define('AddressType', {
     tableName: 'address_types'
 });
 
-AddressType.hasMany(Address, {foreignKey: 'address_type_id'} );
+//AddressType.hasMany(Address, {foreignKey: 'address_type_id'} );
 
 export default AddressType;

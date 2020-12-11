@@ -1,7 +1,6 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
-
-import Role from './Role';
+import bcrypt from 'bcrypt';
 
 const User = sequelize.define('User',{
     id: {
@@ -22,14 +21,19 @@ const User = sequelize.define('User',{
         type: Sequelize.BOOLEAN,
         defaultValue: true
     },
+    session_token: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        defaultValue: null
+    },
     role_id: {
         type: Sequelize.INTEGER,
         defaultValue: 2
     },
     createdAt: {
         type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW
+        allowNull: true,
+        defaultValue: null
     },
     updatedAt: {
         type: Sequelize.DATE,
@@ -43,9 +47,43 @@ const User = sequelize.define('User',{
     }
 },{
     timestamps: false,
-    tableName: 'users'
+    tableName: 'users',
+    hooks: {
+        beforeCreate: async (user, options) => {
+            user.password = await user.hashPassword(user.password);
+        },
+        beforeUpdate: async (user, options) => {
+            if(user.password != ''){
+                user.password = await user.hashPassword(user.password);
+            } else {
+                delete user.dataValues.password;
+            }
+        }
+    }
 });
 
-User.belongsTo(Role, { foreignKey: 'role_id' });
+User.prototype.hashPassword = async (password) => {
+    return await bcrypt.hash(password, process.env.SECURITY_SALT);
+};
+
+User.getUserByUsername = async (username) => {
+    return await User.findOne({where: {username}});
+};
+
+User.validateCredentials = async (username, password) => {
+    const auxUser = await User.build();
+    const hashedPassword = await auxUser.hashPassword(password);
+
+    return await User.findOne({
+        where: { username, password: hashedPassword }
+    });
+}
+
+User.generateSessionToken = async (user) => {
+    const token = await bcrypt.genSalt(20);
+    await user.update({session_token: token});
+
+    return token;
+};
 
 export default User;

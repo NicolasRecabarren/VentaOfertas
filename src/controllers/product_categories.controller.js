@@ -1,4 +1,5 @@
-import ProductCategory from '../models/ProductCategory';
+import response from './response.controller';
+import { Product, ProductCategory } from '../models';
 
 /**
     Método que obtiene las categorías de productos creadas.
@@ -10,14 +11,17 @@ const getCategories = async (req, res) => {
 
     let result = [];
     if( req.params.id === undefined ){
-        result = await ProductCategory.findAll();
+        result = await ProductCategory.findAll({
+            where: {product_category_id: null},
+            include: ProductCategory
+        });
+
     } else {
         const { id } = req.params;
         result = await ProductCategory.findOne({where: {id}});
     }
     
-    res.status(200)
-        .json( {data: result} );
+    return response.sendJson(res, 'Información recuperada.', result, 200);
 }
 
 /**
@@ -26,94 +30,71 @@ const getCategories = async (req, res) => {
     Method: POST
 **/
 const createCategory = async (req, res) => {
-
-    const { name, product_category_id } = req.body;
-    
     try {
+        const { name, product_category_id, priority, icon } = req.body;
+
         // Si la categoría del producto viene en el JSON, debemos validar que esa categoría exista.
-        if(product_category_id != null){
+        if( product_category_id != null){
             const result = await ProductCategory.findOne({where: {id: product_category_id}});
-            if( result === null ){
-                res.status(404).json({
-                    message: 'La categoría asociada no fue encontrada.',
-                    data: {},
-                    error: true
-                });
-                return false;
-            }
+            if( result === null )
+                return response.sendJson(res, 'La categoría no fue encontrada.', {}, 404);
         }
         
         // Creamos la categoría en la base de datos.
-        const createdCategory = await ProductCategory.create({ name, product_category_id }, {fields: ['name','product_category_id']});
+        const createdAt = new Date();
+        const createdCategory = await ProductCategory.create(
+            {name,product_category_id,priority,icon,createdAt},
+            {fields: ['name','product_category_id','priority','icon','createdAt']}
+        );
         if( createdCategory ){
-            res.json({
-                message: 'Categoría creada correctamente.',
-                data: createdCategory,
-                error: false
-            });
+            return response.sendJson(res, `Categoría creada correctamente.`, createdCategory, 200);
         }
+
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            message: 'No se ha guardado la categoría.',
-            data: {},
-            error: true
-        });
+        return response.sendJson(res, 'No se ha guardado la categoría.');
     }
 }
 
 /**
     Método que actualiza una categoría de productos en la base de datos.
     Ruta: '/api/product_categories/:id?'
+    Method: PUT
 **/
 const updateCategory = async (req, res) => {
-    if( req.params.id === undefined ){
-        res.status(404).json({
-            message: 'La categoría especificada no es válida.'
-        });
-        return false;
-    }
-
-    const { id } = req.params;
-    const { name, product_category_id } = req.body;
+    if( req.params.id === undefined )
+        return response.sendJson(res, 'El ID no ha sido especificado.', {}, 404);
 
     try {
+        const { id } = req.params;
+        const { name, product_category_id, priority, icon } = req.body;
+
+        // Si la categoría del producto viene en el JSON, debemos validar que esa categoría exista.
         if( product_category_id != null){
             const result = await ProductCategory.findOne({where: {id: product_category_id}});
-            if( result === null ){
-                res.status(404).json({
-                    message: 'La categoría asociada no fue encontrada.',
-                    data: {},
-                    error: true
-                });
-                return false;
-            }
+            if( result === null )
+                return response.sendJson(res, 'La categoría no fue encontrada.', {}, 404);
+        }
+        
+        // Validamos que la categoría exista
+        const category = await ProductCategory.findOne({ where: {id}});
+        if( !category ){
+            return response.sendJson(res, 'Categoría no encontrada.', {}, 404);
         }
 
-        const category = await ProductCategory.findOne({ where: {id}});
-        if( category ){
-            await category.update({ name, product_category_id });
-            res.status(200).json({
-                message: `La categoría ha sido modificada correctamente.`,
-                data: category,
-                error: false
-            });
-        } else {
-            res.status(404).json({
-                message: `La categoría especificada no es válida.`,
-                data: {},
-                error: true
-            });
-        }
+        const updatedAt = new Date();
+        await category.update({
+            name,
+            priority,
+            icon,
+            product_category_id,
+            updatedAt
+        });
+        return response.sendJson(res, `La categoría ha sido modificada correctamente.`, category, 200);
         
     } catch (error) {
         console.log(error);
-
-        res.json({
-            message: 'No se ha guardado la categoría.',
-            data: {},
-            error: true
-        });
+        return response.sendJson(res, 'No se ha guardado la categoría.');
     }
 }
 
@@ -123,32 +104,34 @@ const updateCategory = async (req, res) => {
     Method: DELETE
 **/
 const deleteCategory = async (req, res) => {
-    if( req.params.id === undefined ){
-        res.status(404).json({
-            message: 'La categoría especificada no es válida.',
-            data: {},
-            error: true
-        });
-    } else {
+    if( req.params.id === undefined )
+        return response.sendJson(res, 'El ID no ha sido especificado.', {}, 404);
+
+    try {
         const {id} = req.params;
 
-        try {
-            const affectedRows = await ProductCategory.destroy({ where: {id}});
-
-            res.status(200).json({
-                message: `La categoría ha sido eliminada correctamente.`,
-                data: {affectedRows},
-                error: false
-            });
-        } catch (error) {
-            console.log(error);
-
-            res.json({
-                message: 'No se ha podido eliminar la categoría.',
-                data: {},
-                error: true
-            });
+        // Validamos que la categoría exista.
+        const category = await ProductCategory.findOne({ where: {id}});
+        if( !category ){
+            return response.sendJson(res, 'Categoría no encontrada.', {}, 404);
         }
+
+        // Validamos que la categoría no tenga categorías hijas.
+        const validaProductCategory = await ProductCategory.findAll({where: {product_category_id: id}});
+        if( validaProductCategory.length > 0 )
+            return response.sendJson(res,'No se puede eliminar la categoría debido a que tiene otras categorías asociadas.');
+        
+        // Validamos que la categoría no tenga productos asociados.
+        const validaProducts = Product.findAll({where: {product_category_id: id}});
+        if( validaProducts.length > 0 )
+            return response.sendJson(res,'No se puede eliminar la categoría debido a que tiene productos asociados.');
+
+        const affectedRows = await ProductCategory.destroy({ where: {id}});
+        return response.sendJson(res,'La categoría ha sido eliminada correctamente.',{affectedRows},200);
+
+    } catch (error) {
+        console.log(error);
+        return response.sendJson(res, 'No se ha podido eliminar la categoría.');
     }
 }
 
@@ -158,44 +141,29 @@ const deleteCategory = async (req, res) => {
     Method: POST
 **/
 const disableCategory = async (req, res) => {
-    if( req.params.id === undefined ){
-        res.status(404).json({
-            message: 'La categoría especificada no es válida.',
-            data: {},
-            error: true
-        });
-    } else {
+    if( req.params.id === undefined )
+        return response.sendJson(res, 'El ID no ha sido especificado.', {}, 404);
+    
+    try {
         const { id } = req.params;
 
-        try {
-            const category = await ProductCategory.findOne({ where: {id}});
-
-            if( category ){
-                
-                const deletedAt = category.deletedAt === null ? new Date() : null;
-                await category.update({ deletedAt });
-                res.status(200).json({
-                    message: `La categoría ha sido ${deletedAt === null ? "habilitada" : "inhabilitada"} correctamente.`,
-                    data: category,
-                    error: false
-                });
-            } else {
-                res.status(404).json({
-                    message: `La categoría especificada no es válida.`,
-                    data: {},
-                    error: true
-                });
-            }
-            
-        } catch (error) {
-            console.log(error);
-
-            res.json({
-                message: 'No se ha inhabilitado la categoría.',
-                data: {},
-                error: true
-            });
+        // Validamos que la categoría exista
+        const category = await ProductCategory.findOne({ where: {id}});
+        if( !category ){
+            return response.sendJson(res, 'Categoría no encontrada.', {}, 404);
         }
+
+        const deletedAt = category.deletedAt === null ? new Date() : null;
+        await category.update({ deletedAt });
+
+        return response.sendJson(res, 
+            `La categoría ha sido ${deletedAt === null ? "activada" : "desactivada"} correctamente.`,
+            category, 200
+        );
+        
+    } catch (error) {
+        console.log(error);
+        return response.sendJson(res, 'No se ha podido desactivar la categoría.');
     }
 }
 

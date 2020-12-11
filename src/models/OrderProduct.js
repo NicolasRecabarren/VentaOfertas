@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../database/connection';
 
-import Order from './Order';
-import Product from './Product';
+/*import Order from './Order';
+import Product from './Product';*/
 
 const OrderProduct = sequelize.define('OrderProduct',{
     id: {
@@ -47,7 +47,7 @@ const OrderProduct = sequelize.define('OrderProduct',{
     tableName: 'order_products'
 });
 
-OrderProduct.belongsTo(Product, { foreignKey: 'product_id' });
-OrderProduct.belongsTo(Order, { foreignKey: 'order_id' });
+/*OrderProduct.belongsTo(Product, { foreignKey: 'product_id' });
+OrderProduct.belongsTo(Order, { foreignKey: 'order_id' });*/
 
 export default OrderProduct;
