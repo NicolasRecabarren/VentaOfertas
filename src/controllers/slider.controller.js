@@ -16,8 +16,7 @@ const getSliders = async (req, res) => {
         result = await Slider.findOne({where: {id}});
     }
     
-    res.status(200)
-        .json( {data: result} );
+    return response.sendJson(res, 'Información recuperada.', result, 200);
 }
 
 /**
@@ -43,22 +42,16 @@ const createSlider = async (req, res) => {
             }
         } */
         
-        // Creamos la categoría en la base de datos.
+        // Creamos el slider en la base de datos.
         const createdSlider = await Slider.create({ title, subtitle, body, link }, {fields: ['title','subtitle','body','link']});
         if( createdSlider ){
-            res.json({
-                message: 'Slider creado correctamente.',
-                data: slider,
-                error: false
-            });
+
+            return response.sendJson(res, `Slider guardado correctamente.`, createdSlider, 200);
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            message: 'No se ha guardado el Slider.',
-            data: {},
-            error: true
-        });
+        
+        return response.sendJson(res, 'No se ha guardado el slider.');
     }
 }
 
@@ -68,10 +61,7 @@ const createSlider = async (req, res) => {
 **/
 const updateSlider = async (req, res) => {
     if( req.params.id === undefined ){
-        res.status(404).json({
-            message: 'El Slider especificado no es válido.'
-        });
-        return false;
+        return response.sendJson(res, 'El ID no ha sido especificado.', {}, 404);
     }
 
     const { id } = req.params;
@@ -81,39 +71,25 @@ const updateSlider = async (req, res) => {
         if( id != null){
             const result = await Slider.findOne({where: {id: id}});
             if( result === null ){
-                res.status(404).json({
-                    message: 'El Slider asociado no fue encontrado.',
-                    data: {},
-                    error: true
-                });
-                return false;
+
+                return response.sendJson(res, 'El Slider asociado no fue encontrada.', {}, 404);
             }
         }
 
         const slider = await Slider.findOne({ where: {id}});
         if( slider ){
             await slider.update({ title, subtitle, body, link });
-            res.status(200).json({
-                message: `El Slider ha sido modificado correctamente.`,
-                data: slider,
-                error: false
-            });
+
+            return response.sendJson(res, 'El Slider ha sido modificado correctamente.', slider, 200);
         } else {
-            res.status(404).json({
-                message: `El Slider especificado no es válida.`,
-                data: {},
-                error: true
-            });
+
+            return response.sendJson(res, 'El Slider especificado no es válido.', {}, 404);
         }
         
     } catch (error) {
         console.log(error);
 
-        res.json({
-            message: 'No se ha guardado el slider.',
-            data: {},
-            error: true
-        });
+        return response.sendJson(res, 'No se ha guardado el slider.');
     }
 }
 
@@ -124,30 +100,18 @@ const updateSlider = async (req, res) => {
 **/
 const deleteSlider = async (req, res) => {
     if( req.params.id === undefined ){
-        res.status(404).json({
-            message: 'El Slider especificado no es válido.',
-            data: {},
-            error: true
-        });
+        return response.sendJson(res, 'El ID no ha sido especificado.', {}, 404);
     } else {
         const {id} = req.params;
 
         try {
             const affectedRows = await Slider.destroy({ where: {id}});
 
-            res.status(200).json({
-                message: `El Slider ha sido eliminado correctamente.`,
-                data: {affectedRows},
-                error: false
-            });
+            return response.sendJson(res, 'El slider ha sido eliminado correctamente.', affectedRows, 200);
         } catch (error) {
             console.log(error);
 
-            res.json({
-                message: 'No se ha podido eliminar el slider.',
-                data: {},
-                error: true
-            });
+            return response.sendJson(res, 'No se ha podido desactivar el slider.');
         }
     }
 }
